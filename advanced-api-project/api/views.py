@@ -1,33 +1,39 @@
-from rest_framework import generics, permissions
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Book
 from .serializers import BookSerializer
 
-# ✅ عرض كل الكتب
+
+# عرض قائمة الكتب (مسموح للجميع)
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]  # متاح للجميع
+    permission_classes = [AllowAny]
 
-# ✅ عرض كتاب واحد
+
+# عرض تفاصيل كتاب واحد (مسموح للجميع)
 class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]  # متاح للجميع
+    permission_classes = [AllowAny]
 
-# ✅ إنشاء كتاب جديد
+
+# إضافة كتاب جديد (مسجل فقط)
 class BookCreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]  # لازم تسجيل دخول
+    permission_classes = [IsAuthenticated]
 
-# ✅ تعديل كتاب
+
+# تعديل كتاب موجود (مسجل فقط)
 class BookUpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]  # لازم تسجيل دخول
+    permission_classes = [IsAuthenticated]
 
-# ✅ حذف كتاب
+
+# حذف كتاب (مسجل فقط)
 class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]  # لازم تسجيل دخول
+    permission_classes = [IsAuthenticated]
