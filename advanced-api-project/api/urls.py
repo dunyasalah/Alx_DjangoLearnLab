@@ -1,6 +1,4 @@
 from django.urls import path
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-
 from .views import (
     BookListView,
     BookDetailView,
@@ -14,5 +12,6 @@ urlpatterns = [
     path('books/<int:pk>/', BookDetailView.as_view(), name='book-detail'),
     path('books/create/', BookCreateView.as_view(), name='book-create'),
     path('books/update/<int:pk>/', BookUpdateView.as_view(), name='book-update'),
-    path('books/delete/<int:pk>/', BookDeleteView.as_view(), name='book-delete'),
+    path('books/delete/<int:pk>/', BookDeleteView.as_view(), name='book-delete'), 
+    path('books/<int:pk>/', BookDetailView.as_view(), name='book-detail'),
 ]

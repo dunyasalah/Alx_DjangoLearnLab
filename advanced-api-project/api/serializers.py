@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from datetime import datetime
-from .models import Author, Book
+from .models import Book
 
 # Serializer لكتاب واحد
 class BookSerializer(serializers.ModelSerializer):
@@ -20,5 +20,4 @@ class AuthorSerializer(serializers.ModelSerializer):
     books = BookSerializer(many=True, read_only=True)  # Nested Serializer
 
     class Meta:
-        model = Author
         fields = ['name', 'books']
