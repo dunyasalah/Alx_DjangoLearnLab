@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',        
+    'rest_framework',
     'rest_framework.authtoken',
     'accounts',  
 ]
@@ -55,6 +55,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'social_media_api.urls'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
 
 TEMPLATES = [
     {
