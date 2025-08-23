@@ -1,30 +1,23 @@
-from django.contrib.auth import authenticate, get_user_model
-from rest_framework import generics, status
-from rest_framework.response import Response
+from rest_framework import generics
+from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from .serializers import RegisterSerializer
-
-User = get_user_model()
+from rest_framework.response import Response
+from .serializers import RegisterSerializer, UserSerializer
+from django.contrib.auth import get_user_model
 
 class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
     serializer_class = RegisterSerializer
 
-class LoginView(generics.GenericAPIView):
-    serializer_class = RegisterSerializer
-
-    def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(username=username, password=password)
-        if user:
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key})
-        return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
-
-class ProfileView(generics.RetrieveAPIView):
-    serializer_class = RegisterSerializer
-    queryset = User.objects.all()
-
-    def get_object(self):
-        return self.request.user
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'username': user.username
+        })
