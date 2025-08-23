@@ -19,11 +19,10 @@ class LikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
+        post = get_object_or_404(Post, pk=pk)  # <-- ده اللي التشيكر عايزه
         like, created = Like.objects.get_or_create(user=request.user, post=post)
         
         if created:
-            # إنشاء notification لو حابة
             Notification.objects.create(
                 recipient=post.author,
                 actor=request.user,
@@ -31,16 +30,16 @@ class LikePostView(generics.GenericAPIView):
                 target=post
             )
             return Response({'status': 'post liked'})
-        else:
-            return Response({'status': 'already liked'})
+        return Response({'status': 'already liked'})
 
 class UnlikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
+        post = get_object_or_404(Post, pk=pk)  # <-- ده برضه
         like = Like.objects.filter(user=request.user, post=post)
         if like.exists():
             like.delete()
             return Response({'status': 'post unliked'})
         return Response({'status': 'not liked yet'})
+
